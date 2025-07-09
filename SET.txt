@@ -1,0 +1,740 @@
+🔹 Set 1: FIND-S Algorithm for Hypothesis Learning
+Question 1: Identify the most specific hypothesis for disease prediction based on symptoms.
+
+python
+Copy
+Edit
+import pandas as pd
+
+def main():
+    d = pd.read_csv('disease.csv')
+    h = ['0'] * (len(d.columns) - 1)
+
+    for i in range(len(d)):
+        if d.iloc[i, -1].lower() == 'positive':
+            for j in range(len(h)):
+                if h[j] == '0':
+                    h[j] = d.iloc[i, j]
+                elif h[j] != d.iloc[i, j]:
+                    h[j] = '?'
+
+    print("Most specific hypothesis:", h)
+
+main()
+Question 2: Derive the common characteristics of accepted student profiles.
+
+python
+Copy
+Edit
+import pandas as pd
+
+def main():
+    d = pd.read_csv('students.csv')  # Replace with your actual filename
+    h = ['0'] * (len(d.columns) - 1)
+
+    for i in range(len(d)):
+        if d.iloc[i, -1].lower() == 'yes':
+            for j in range(len(h)):
+                if h[j] == '0':
+                    h[j] = d.iloc[i, j]
+                elif h[j] != d.iloc[i, j]:
+                    h[j] = '?'
+
+    print("Accepted student profile hypothesis:", h)
+
+main()
+Question 3: Generalize the requirements for high-performing employees.
+
+python
+Copy
+Edit
+import pandas as pd
+
+def main():
+    d = pd.read_csv('employees.csv')  # Replace with your actual filename
+    h = ['0'] * (len(d.columns) - 1)
+
+    for i in range(len(d)):
+        if d.iloc[i, -1].lower() == 'high':
+            for j in range(len(h)):
+                if h[j] == '0':
+                    h[j] = d.iloc[i, j]
+                elif h[j] != d.iloc[i, j]:
+                    h[j] = '?'
+
+    print("High-performing employee hypothesis:", h)
+
+main()
+Question 4: Filter purchase preferences from loyal customers.
+
+python
+Copy
+Edit
+import pandas as pd
+
+def main():
+    d = pd.read_csv('customers.csv')  # Replace with your actual filename
+    h = ['0'] * (len(d.columns) - 1)
+
+    for i in range(len(d)):
+        if d.iloc[i, -1].lower() == 'loyal':
+            for j in range(len(h)):
+                if h[j] == '0':
+                    h[j] = d.iloc[i, j]
+                elif h[j] != d.iloc[i, j]:
+                    h[j] = '?'
+
+    print("Loyal customer purchase preference hypothesis:", h)
+
+main()
+
+-----------------------------------------------------------
+
+✅ Set 2: Candidate Elimination Algorithm
+🔹 Q1: Determine possible rules for job shortlisting using resume data
+python
+Copy
+Edit
+import pandas as pd
+
+def consistent(h, ex):
+    for x, y in zip(h, ex):
+        if x != '?' and x != y:
+            return False
+    return True
+
+d = pd.read_csv('resumes.csv')
+s = ['0'] * (len(d.columns) - 1)
+g = [['?'] * (len(d.columns) - 1)]
+
+for i in range(len(d)):
+    row = d.iloc[i]
+    if row[-1] == 'Yes':
+        for j in range(len(s)):
+            if s[j] == '0':
+                s[j] = row[j]
+            elif s[j] != row[j]:
+                s[j] = '?'
+        g = [h for h in g if consistent(h, row[:-1])]
+    else:
+        g_new = []
+        for h in g:
+            for j in range(len(h)):
+                if h[j] == '?':
+                    h1 = h.copy()
+                    h1[j] = s[j]
+                    g_new.append(h1)
+        g = g_new
+
+print("Specific Hypothesis:", s)
+print("General Hypotheses:", g)
+🔹 Q2: Identify consistent hiring strategies for developers
+python
+Copy
+Edit
+import pandas as pd
+
+def consistent(h, ex):
+    for x, y in zip(h, ex):
+        if x != '?' and x != y:
+            return False
+    return True
+
+d = pd.read_csv('developers.csv')  # Assume this is the dataset for developers
+s = ['0'] * (len(d.columns) - 1)
+g = [['?'] * (len(d.columns) - 1)]
+
+for i in range(len(d)):
+    row = d.iloc[i]
+    if row[-1] == 'Yes':
+        for j in range(len(s)):
+            if s[j] == '0':
+                s[j] = row[j]
+            elif s[j] != row[j]:
+                s[j] = '?'
+        g = [h for h in g if consistent(h, row[:-1])]
+    else:
+        g_new = []
+        for h in g:
+            for j in range(len(h)):
+                if h[j] == '?':
+                    h1 = h.copy()
+                    h1[j] = s[j]
+                    g_new.append(h1)
+        g = g_new
+
+print("Specific Hypothesis:", s)
+print("General Hypotheses:", g)
+🔹 Q3: Define the version space for customer eligibility in finance
+python
+Copy
+Edit
+import pandas as pd
+
+def consistent(h, ex):
+    for x, y in zip(h, ex):
+        if x != '?' and x != y:
+            return False
+    return True
+
+d = pd.read_csv('finance.csv')  # Assume this is the dataset for finance eligibility
+s = ['0'] * (len(d.columns) - 1)
+g = [['?'] * (len(d.columns) - 1)]
+
+for i in range(len(d)):
+    row = d.iloc[i]
+    if row[-1] == 'Yes':
+        for j in range(len(s)):
+            if s[j] == '0':
+                s[j] = row[j]
+            elif s[j] != row[j]:
+                s[j] = '?'
+        g = [h for h in g if consistent(h, row[:-1])]
+    else:
+        g_new = []
+        for h in g:
+            for j in range(len(h)):
+                if h[j] == '?':
+                    h1 = h.copy()
+                    h1[j] = s[j]
+                    g_new.append(h1)
+        g = g_new
+
+print("Specific Hypothesis:", s)
+print("General Hypotheses:", g)
+🔹 Q4: Predict which product reviews meet publishing standards
+python
+Copy
+Edit
+import pandas as pd
+
+def consistent(h, ex):
+    for x, y in zip(h, ex):
+        if x != '?' and x != y:
+            return False
+    return True
+
+d = pd.read_csv('reviews.csv')  # Assume this is the dataset for product reviews
+s = ['0'] * (len(d.columns) - 1)
+g = [['?'] * (len(d.columns) - 1)]
+
+for i in range(len(d)):
+    row = d.iloc[i]
+    if row[-1] == 'Yes':
+        for j in range(len(s)):
+            if s[j] == '0':
+                s[j] = row[j]
+            elif s[j] != row[j]:
+                s[j] = '?'
+        g = [h for h in g if consistent(h, row[:-1])]
+    else:
+        g_new = []
+        for h in g:
+            for j in range(len(h)):
+                if h[j] == '?':
+                    h1 = h.copy()
+                    h1[j] = s[j]
+                    g_new.append(h1)
+        g = g_new
+
+print("Specific Hypothesis:", s)
+print("General Hypotheses:", g)
+
+------------------------------------------------------------
+✅ Set 3: ID3 Decision Tree
+🔹 Q1: Build a decision tree for predicting weather-based activities
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier, export_text
+from sklearn.preprocessing import LabelEncoder
+
+d = pd.read_csv("weather.csv")
+le = LabelEncoder()
+for col in d.columns:
+    d[col] = le.fit_transform(d[col])
+
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+model = DecisionTreeClassifier(criterion="entropy")
+model.fit(x, y)
+print(export_text(model, feature_names=list(x.columns)))
+🔹 Q2: Create a tree to decide whether an email is important
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier, export_text
+from sklearn.feature_extraction.text import CountVectorizer
+
+d = pd.read_csv("email.csv")
+vec = CountVectorizer()
+X = vec.fit_transform(d['Text']).toarray()
+y = d['Important'].map({'Yes':1, 'No':0})
+
+model = DecisionTreeClassifier(criterion='entropy')
+model.fit(X, y)
+print("Tree built. Accuracy:", model.score(X, y))
+🔹 Q3: Predict course selection based on student interests
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier, export_text
+from sklearn.preprocessing import LabelEncoder
+
+d = pd.read_csv("courses.csv")
+le = LabelEncoder()
+for col in d.columns:
+    d[col] = le.fit_transform(d[col])
+
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+model = DecisionTreeClassifier()
+model.fit(x, y)
+print(export_text(model, feature_names=list(x.columns)))
+🔹 Q4: Recommend fitness plans using health indicators
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier, export_text
+from sklearn.preprocessing import LabelEncoder
+
+d = pd.read_csv("fitness.csv")
+le = LabelEncoder()
+for col in d.columns:
+    d[col] = le.fit_transform(d[col])
+
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+model = DecisionTreeClassifier()
+model.fit(x, y)
+print(export_text(model, feature_names=list(x.columns)))
+✅ Set 4: Artificial Neural Network (ANN - Backpropagation)
+🔹 Q1: Train an ANN to predict energy consumption
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.neural_network import MLPRegressor
+
+d = pd.read_csv("energy.csv")
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+
+model = MLPRegressor(hidden_layer_sizes=(10,), max_iter=1000)
+model.fit(x, y)
+print("Predictions:", model.predict(x))
+🔹 Q2: Use ANN to detect handwritten digits
+python
+Copy
+Edit
+from sklearn.datasets import load_digits
+from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+d = load_digits()
+xtrain, xtest, ytrain, ytest = train_test_split(d.data, d.target, test_size=0.2)
+model = MLPClassifier(hidden_layer_sizes=(50,), max_iter=1000)
+model.fit(xtrain, ytrain)
+print("Accuracy:", accuracy_score(ytest, model.predict(xtest)))
+🔹 Q3: Forecast traffic congestion using ANN
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.neural_network import MLPRegressor
+
+d = pd.read_csv("traffic.csv")
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+
+model = MLPRegressor(hidden_layer_sizes=(10, 5), max_iter=1000)
+model.fit(x, y)
+print("Predicted:", model.predict(x))
+🔹 Q4: Predict learning outcomes from student behavior
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.neural_network import MLPClassifier
+
+d = pd.read_csv("students.csv")
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+
+model = MLPClassifier(hidden_layer_sizes=(10,), max_iter=1000)
+model.fit(x, y)
+print("Predictions:", model.predict(x))
+✅ Set 5: K-Nearest Neighbors (KNN)
+🔹 Q1: Classify diabetes status using patient data
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+d = pd.read_csv("diabetes.csv")
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size=0.2)
+
+model = KNeighborsClassifier(n_neighbors=3)
+model.fit(xtrain, ytrain)
+print("Accuracy:", accuracy_score(ytest, model.predict(xtest)))
+🔹 Q2: Recommend products using nearest customer behavior
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+
+d = pd.read_csv("products.csv")
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+
+model = KNeighborsClassifier(n_neighbors=3)
+model.fit(x, y)
+print("Predictions:", model.predict(x))
+🔹 Q3: Predict movie preferences from user profiles
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+
+d = pd.read_csv("movies.csv")
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+
+model = KNeighborsClassifier(n_neighbors=5)
+model.fit(x, y)
+print("Movie preference predictions:", model.predict(x))
+🔹 Q4: Classify students as “at risk” or “not at risk” based on performance
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+
+d = pd.read_csv("risk.csv")
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+
+model = KNeighborsClassifier(n_neighbors=3)
+model.fit(x, y)
+print("Risk classification:", model.predict(x))
+
+
+
+
+✅ Set 6: Naive Bayes Classifier
+🔹 Q1: Predict email as spam or not
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score
+
+d = pd.read_csv("spam.csv")
+x = d['EmailText']
+y = d['Label']
+
+vec = CountVectorizer()
+x_vec = vec.fit_transform(x)
+
+model = MultinomialNB()
+model.fit(x_vec, y)
+yp = model.predict(x_vec)
+print("Accuracy:", accuracy_score(y, yp))
+🔹 Q2: Perform sentiment analysis on reviews
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import classification_report
+
+d = pd.read_csv("reviews.csv")
+x = d['Review']
+y = d['Sentiment']
+
+vec = CountVectorizer()
+x_vec = vec.fit_transform(x)
+
+model = MultinomialNB()
+model.fit(x_vec, y)
+pred = model.predict(x_vec)
+print(classification_report(y, pred))
+🔹 Q3: Classify news articles as fake or real
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
+d = pd.read_csv("news.csv")
+x = d['Article']
+y = d['Label']
+
+vec = CountVectorizer()
+x_vec = vec.fit_transform(x)
+
+model = MultinomialNB()
+model.fit(x_vec, y)
+print("Prediction:", model.predict(x_vec))
+🔹 Q4: Predict fraudulent transactions
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+
+d = pd.read_csv("transactions.csv")
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+
+xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size=0.2)
+model = GaussianNB()
+model.fit(xtrain, ytrain)
+print("Accuracy:", accuracy_score(ytest, model.predict(xtest)))
+✅ Set 7: Logistic Regression
+🔹 Q1: Predict university admission from GRE and GPA
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+d = pd.read_csv("admissions.csv")
+x = d[['GRE', 'GPA', 'Research']]
+y = d['Admitted']
+
+xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size=0.2)
+model = LogisticRegression()
+model.fit(xtrain, ytrain)
+print("Accuracy:", accuracy_score(ytest, model.predict(xtest)))
+🔹 Q2: Classify bank loan defaults
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+
+d = pd.read_csv("loans.csv")
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+
+model = LogisticRegression()
+model.fit(x, y)
+print("Prediction:", model.predict(x))
+🔹 Q3: Identify customers likely to churn
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+
+d = pd.read_csv("churn.csv")
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+
+model = LogisticRegression()
+model.fit(x, y)
+print("Churn prediction:", model.predict(x))
+🔹 Q4: Predict whether a customer will buy a product or not
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+
+d = pd.read_csv("buy.csv")
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+
+model = LogisticRegression()
+model.fit(x, y)
+print("Purchase prediction:", model.predict(x))
+✅ Set 8: Linear and Polynomial Regression
+🔹 Q1: Predict house price based on size and location
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+d = pd.read_csv("house_prices.csv")
+x = d[['Area', 'Bedrooms', 'LocationScore']]
+y = d['Price']
+
+model = LinearRegression()
+model.fit(x, y)
+print("Price prediction:", model.predict(x))
+🔹 Q2: Model car price prediction using age and brand
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+d = pd.read_csv("cars.csv")
+x = d[['Age', 'BrandScore']]
+y = d['Price']
+
+model = LinearRegression()
+model.fit(x, y)
+print("Car Price prediction:", model.predict(x))
+🔹 Q3: Compare linear and polynomial models on product sales
+python
+Copy
+Edit
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+
+d = pd.read_csv("sales.csv")
+x = d[['MarketingSpend']]
+y = d['Sales']
+
+# Linear
+lin = LinearRegression()
+lin.fit(x, y)
+print("Linear:", lin.predict(x))
+
+# Polynomial
+poly = PolynomialFeatures(degree=2)
+x_poly = poly.fit_transform(x)
+poly_model = LinearRegression()
+poly_model.fit(x_poly, y)
+print("Polynomial:", poly_model.predict(x_poly))
+🔹 Q4: Estimate monthly salary from years of experience
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+d = pd.read_csv("salary.csv")
+x = d[['Experience']]
+y = d['Salary']
+
+model = LinearRegression()
+model.fit(x, y)
+print("Salary prediction:", model.predict(x))
+✅ Set 9: Expectation-Maximization (EM) Clustering
+🔹 Q1: Cluster customers based on age and spending
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.mixture import GaussianMixture
+
+d = pd.read_csv("retail.csv")
+x = d[['Age', 'SpendScore']]
+
+model = GaussianMixture(n_components=2)
+model.fit(x)
+print("Cluster labels:", model.predict(x))
+🔹 Q2: Segment students by study patterns
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.mixture import GaussianMixture
+
+d = pd.read_csv("students.csv")
+x = d.iloc[:, :-1]
+
+model = GaussianMixture(n_components=2)
+model.fit(x)
+print("Student segments:", model.predict(x))
+🔹 Q3: Group diners by meal preferences
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.mixture import GaussianMixture
+
+d = pd.read_csv("dining.csv")
+x = d.iloc[:, :-1]
+
+model = GaussianMixture(n_components=3)
+model.fit(x)
+print("Diner clusters:", model.predict(x))
+🔹 Q4: Classify market regions based on customer density
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.mixture import GaussianMixture
+
+d = pd.read_csv("regions.csv")
+x = d[['CustomerCount', 'RegionScore']]
+
+model = GaussianMixture(n_components=2)
+model.fit(x)
+print("Market regions:", model.predict(x))
+✅ Set 10: Classification Algorithm Comparison
+🔹 Q1: Compare NB, DT, and KNN for heart disease prediction
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+d = pd.read_csv("heart.csv")
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size=0.3)
+
+print("NB:", accuracy_score(ytest, GaussianNB().fit(xtrain, ytrain).predict(xtest)))
+print("DT:", accuracy_score(ytest, DecisionTreeClassifier().fit(xtrain, ytrain).predict(xtest)))
+print("KNN:", accuracy_score(ytest, KNeighborsClassifier().fit(xtrain, ytrain).predict(xtest)))
+🔹 Q2: Apply and compare classifiers for credit risk prediction
+python
+Copy
+Edit
+# Replace file with 'credit.csv' and same logic as above
+🔹 Q3: Evaluate different models for student performance
+python
+Copy
+Edit
+# Replace file with 'student_performance.csv' and same logic
+🔹 Q4: Test SVM, NB, and KNN on social media fraud detection
+python
+Copy
+Edit
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+d = pd.read_csv("social_fraud.csv")
+x = d.iloc[:, :-1]
+y = d.iloc[:, -1]
+xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size=0.2)
+
+print("SVM:", accuracy_score(ytest, SVC().fit(xtrain, ytrain).predict(xtest)))
+print("NB:", accuracy_score(ytest, GaussianNB().fit(xtrain, ytrain).predict(xtest)))
+print("KNN:", accuracy_score(ytest, KNeighborsClassifier().fit(xtrain, ytrain).predict(xtest)))

@@ -1,0 +1,574 @@
+#1 
+import cv2
+
+i = cv2.imread("image.jpg")
+g = cv2.cvtColor(i, cv2.COLOR_BGR2GRAY)
+
+cv2.imshow("Original Image", i)
+cv2.imshow("Grayscale Image", g)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#2
+import cv2
+
+i = cv2.imread("image.jpg")
+b = cv2.GaussianBlur(i, (5, 5), 0)
+
+cv2.imshow("Original Image", i)
+cv2.imshow("Gaussian Blurred Image", b)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#3
+import cv2
+
+i = cv2.imread("image.jpg")
+g = cv2.cvtColor(i, cv2.COLOR_BGR2GRAY)
+e = cv2.Canny(g, 100, 200)
+
+cv2.imshow("Original Image", i)
+cv2.imshow("Canny Edge Image", e)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#4
+import cv2
+
+i = cv2.imread("image.jpg", 0)
+h = cv2.equalizeHist(i)
+
+cv2.imshow("Original Image", i)
+cv2.imshow("Histogram Equalized Image", h)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#5
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+def n(p):
+    i = cv2.imread(p)
+    if i is None:
+        print("Image not found")
+        return None, None, None
+    b, g, r = cv2.split(i)
+    hb = cv2.calcHist([b], [0], None, [256], [0,256])
+    hg = cv2.calcHist([g], [0], None, [256], [0,256])
+    hr = cv2.calcHist([r], [0], None, [256], [0,256])
+    return hb, hg, hr
+hb, hg, hr = n("image.jpg")
+
+plt.figure()
+plt.title("Color Histogram Analysis")
+plt.xlabel("Pixel Intensity")
+plt.ylabel("Number of Pixels")
+plt.plot(hb, color='b')
+plt.plot(hg, color='g')
+plt.plot(hr, color='r')
+plt.show()
+
+#6
+import cv2
+import numpy as np
+
+i = cv2.imread("image.jpg")
+
+k = np.ones((5, 5), np.uint8)
+e = cv2.erode(i, k, iterations=1)
+
+cv2.imshow("Original Image", i)
+cv2.imshow("Eroded Image", e)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#7
+import cv2
+p = "video.mp4"
+v = cv2.VideoCapture(p)
+print("Playing Video in Slow Motion... Press 'q' to stop")
+while True:
+    r, f = v.read()
+    if not r:
+        break
+    cv2.imshow("Slow Motion Video", f)
+    # Slow Motion Delay
+    if cv2.waitKey(100) & 0xFF == ord('q'):
+        break
+v.release()
+cv2.destroyAllWindows()
+v = cv2.VideoCapture(p)
+print("Playing Video in Fast Motion... Press 'q' to stop")
+while True:
+    r, f = v.read()
+    if not r:
+        break
+    cv2.imshow("Fast Motion Video", f)
+    # Fast Motion Delay
+    if cv2.waitKey(5) & 0xFF == ord('q'):
+        break
+v.release()
+cv2.destroyAllWindows()
+
+#8
+import cv2
+import numpy as np
+
+i = cv2.imread("image.jpg")
+
+k = np.ones((5, 5), np.uint8)
+d = cv2.dilate(i, k, iterations=1)
+
+cv2.imshow("Original Image", i)
+cv2.imshow("Dilated Image", d)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#9
+import cv2
+
+i = cv2.imread("image.jpg")
+
+s = cv2.resize(i, (200, 200))
+b = cv2.resize(i, (800, 800))
+
+cv2.imshow("Original Image", i)
+cv2.imshow("Smaller Image", s)
+cv2.imshow("Bigger Image", b)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#10
+import cv2
+
+i = cv2.imread("image.jpg")
+
+r = cv2.rotate(i, cv2.ROTATE_90_CLOCKWISE)
+
+cv2.imshow("Original Image", i)
+cv2.imshow("90 Degree Rotated Image", r)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#11
+import cv2
+
+i = cv2.imread("image.jpg")
+
+r = cv2.rotate(i, cv2.ROTATE_180)
+
+cv2.imshow("Original Image", i)
+cv2.imshow("180 Degree Rotated Image", r)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#12
+import cv2
+
+i = cv2.imread("image.jpg")
+
+r = cv2.rotate(i, cv2.ROTATE_90_COUNTERCLOCKWISE)
+
+cv2.imshow("Original Image", i)
+cv2.imshow("270 Degree Rotated Image", r)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#13
+import cv2
+import numpy as np
+i = cv2.imread("image.jpg")
+h, w = i.shape[:2]
+p1 = np.float32([[50, 50], [200, 50], [50, 200]])
+p2 = np.float32([[10, 100], [200, 50], [100, 250]])
+m = cv2.getAffineTransform(p1, p2)
+a = cv2.warpAffine(i, m, (w, h))
+cv2.imshow("Original Image", i)
+cv2.imshow("Affine Transformed Image", a)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#14
+#question 14
+import cv2
+import numpy as np
+i = cv2.imread("image.jpg")
+h, w = i.shape[:2]
+p1 = np.float32([[50, 50], [300, 50], [50, 300], [300, 300]])
+p2 = np.float32([[0, 0], [w, 0], [0, h], [w, h]])
+m = cv2.getPerspectiveTransform(p1, p2)
+p = cv2.warpPerspective(i, m, (w, h))
+cv2.imshow("Original Image", i)
+cv2.imshow("Perspective Transformed Image", p)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#15
+import cv2
+import numpy as np
+i = cv2.imread("image.jpg")
+g = cv2.cvtColor(i, cv2.COLOR_BGR2GRAY)
+g = np.float32(g)
+c = cv2.cornerHarris(g, 2, 3, 0.04)
+i[c > 0.01 * c.max()] = [0, 0, 255]
+cv2.imshow("Original Image", i)
+cv2.imshow("Harris Corner Detection", i)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#16
+import cv2
+i = cv2.imread("image.jpg")
+g = cv2.cvtColor(i, cv2.COLOR_BGR2GRAY)
+sx = cv2.Sobel(g, cv2.CV_64F, 1, 0, ksize=3)
+sy = cv2.Sobel(g, cv2.CV_64F, 0, 1, ksize=3)
+s = cv2.magnitude(sx, sy)
+cv2.imshow("Original Image", i)
+cv2.imshow("Sobel Edge Image", s)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#17
+import cv2
+i = cv2.imread("image.jpg")
+t = "WATERMARK"
+p = (50, 100)
+cv2.putText(i, t, p, cv2.FONT_HERSHEY_SIMPLEX,
+            2, (255, 255, 255), 3)
+cv2.imshow("Watermarked Image", i)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#18
+import cv2
+i = cv2.imread("image.jpg")
+h, w = i.shape[:2]
+r = i[50:200, 50:200]
+rh, rw = r.shape[:2]
+x = w - rw - 10
+y = h - rh - 10
+i[y:y+rh, x:x+rw] = r
+cv2.imshow("ROI Cropped and Pasted", i)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#19
+import cv2
+import numpy as np
+i = cv2.imread("image.jpg", 0)
+k = np.ones((5, 5), np.uint8)
+e = cv2.erode(i, k, iterations=1)
+cv2.imshow("Original Image", i)
+cv2.imshow("Eroded Image", e)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#20
+import cv2
+import numpy as np
+i = cv2.imread("image.jpg", 0)
+k = np.ones((5, 5), np.uint8)
+d = cv2.dilate(i, k, iterations=1)
+cv2.imshow("Original Image", i)
+cv2.imshow("Dilated Image", d)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#21
+import cv2
+import numpy as np
+i = cv2.imread("image.jpg", 0)
+k = np.ones((5, 5), np.uint8)
+o = cv2.morphologyEx(i, cv2.MORPH_OPEN, k)
+cv2.imshow("Original Image", i)
+cv2.imshow("Opening Operation", o)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#22
+import cv2
+import numpy as np
+i = cv2.imread("image.jpg", 0)
+k = np.ones((5, 5), np.uint8)
+c = cv2.morphologyEx(i, cv2.MORPH_CLOSE, k)
+cv2.imshow("Original Image", i)
+cv2.imshow("Closing Operation", c)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#23
+import cv2
+import numpy as np
+i = cv2.imread("image.jpg", 0)
+k = np.ones((5, 5), np.uint8)
+t = cv2.morphologyEx(i, cv2.MORPH_TOPHAT, k)
+cv2.imshow("Original Image", i)
+cv2.imshow("Top Hat Operation", t)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#24
+import cv2
+import numpy as np
+i = cv2.imread("image.jpg", 0)
+k = np.ones((5, 5), np.uint8)
+b = cv2.morphologyEx(i, cv2.MORPH_BLACKHAT, k)
+cv2.imshow("Original Image", i)
+cv2.imshow("Black Hat Operation", b)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#25
+import cv2
+i = cv2.imread("watch.jpg")
+g = cv2.cvtColor(i, cv2.COLOR_BGR2GRAY)
+b = cv2.GaussianBlur(g, (5, 5), 0)
+e = cv2.Canny(b, 50, 150)
+c, _ = cv2.findContours(e, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+for x in c:
+    a = cv2.contourArea(x)
+    if a > 1000:  # Ignore small objects
+        p = cv2.arcLength(x, True)
+        ap = cv2.approxPolyDP(x, 0.02 * p, True)
+        x1, y1, w, h = cv2.boundingRect(ap)
+        cv2.rectangle(i, (x1, y1), (x1+w, y1+h), (0, 255, 0), 2)
+        cv2.putText(i, "Watch Detected", (x1, y1-10),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+cv2.imshow("Watch Recognition Output", i)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+
+#26
+import cv2
+v = cv2.VideoCapture("video.mp4")
+f = []
+# Read all frames
+while True:
+    r, x = v.read()
+    if not r:
+        break
+    f.append(x)
+v.release()
+# Play frames in reverse order
+for x in reversed(f):
+    cv2.imshow("Reverse Video Playback", x)
+
+    if cv2.waitKey(30) & 0xFF == ord('q'):
+        break
+cv2.destroyAllWindows()
+
+#27
+import cv2
+i = cv2.imread("face.jpg")
+g = cv2.cvtColor(i, cv2.COLOR_BGR2GRAY)
+fc = cv2.CascadeClassifier(cv2.data.haarcascades +
+                          "haarcascade_frontalface_default.xml")
+f = fc.detectMultiScale(g, 1.3, 5)
+for (x, y, w, h) in f:
+    cv2.rectangle(i, (x, y), (x+w, y+h), (0, 255, 0), 2)
+cv2.imshow("Face Detection", i)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#28
+import cv2
+v = cv2.VideoCapture("traffic.mp4")
+bg = cv2.createBackgroundSubtractorMOG2()
+while True:
+    r, f = v.read()
+    if not r:
+        break
+    m = bg.apply(f)
+    c, _ = cv2.findContours(m, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    for x in c:
+        if cv2.contourArea(x) > 3000:
+            a, b, w, h = cv2.boundingRect(x)
+            cv2.rectangle(f, (a, b), (a+w, b+h), (0, 255, 0), 2)
+            cv2.putText(f, "Moving Vehicle", (a, b-5),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+    cv2.imshow("Vehicle Detection", f)
+    if cv2.waitKey(30) == ord("q"):
+        break
+v.release()
+cv2.destroyAllWindows()
+
+#29
+import cv2
+i = cv2.imread("face.jpg")
+g = cv2.cvtColor(i, cv2.COLOR_BGR2GRAY)
+ec = cv2.CascadeClassifier(cv2.data.haarcascades +
+                          "haarcascade_eye.xml")
+e = ec.detectMultiScale(g, 1.3, 5)
+for (x, y, w, h) in e:
+    cv2.rectangle(i, (x, y), (x+w, y+h), (255, 0, 0), 2)
+cv2.imshow("Eye Detection", i)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#30
+import cv2
+i = cv2.imread("face.jpg")
+g = cv2.cvtColor(i, cv2.COLOR_BGR2GRAY)
+sc = cv2.CascadeClassifier(cv2.data.haarcascades +
+                          "haarcascade_smile.xml")
+s = sc.detectMultiScale(g, 1.8, 20)
+for (x, y, w, h) in s:
+    cv2.rectangle(i, (x, y), (x+w, y+h), (0, 0, 255), 2)
+cv2.imshow("Smile Detection", i)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#31
+import cv2
+i = cv2.imread("image.jpg", 0)
+t, s = cv2.threshold(i, 120, 255, cv2.THRESH_BINARY)
+cv2.imshow("Original Image", i)
+cv2.imshow("Segmented Image", s)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#32
+import cv2
+import numpy as np
+def b():
+    w = int(input("Enter width: "))
+    h = int(input("Enter height: "))
+    i = np.ones((h, w, 3), dtype=np.uint8) * 255
+    bw = w // 10
+    bh = h // 10
+    # Top-left Black
+    i[0:bh, 0:bw] = (0, 0, 0)
+    # Top-right Blue
+    i[0:bh, w-bw:w] = (255, 0, 0)
+    # Bottom-left Green
+    i[h-bh:h, 0:bw] = (0, 255, 0)
+    # Bottom-right Red
+    i[h-bh:h, w-bw:w] = (0, 0, 255)
+    cv2.imshow("4 Corner Boxes", i)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+b()
+
+#33
+import cv2
+import numpy as np
+def r():
+    w = int(input("Enter width: "))
+    h = int(input("Enter height: "))
+    i = np.ones((h, w, 3), dtype=np.uint8) * 255
+    cv2.rectangle(i, (50, 50), (200, 200), (0, 255, 0), -1)
+    cv2.imshow("Rectangle Image", i)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+r()
+
+#34
+import cv2
+import numpy as np
+def c():
+    w = int(input("Enter width: "))
+    h = int(input("Enter height: "))
+    i = np.ones((h, w, 3), dtype=np.uint8) * 255
+    cv2.circle(i, (w//2, h//2), 50, (0, 0, 255), -1)
+    cv2.imshow("White Image with Circle", i)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+c()
+
+#35
+import cv2
+def t():
+    i = cv2.imread("image.jpg")
+    s = input("Enter text to display: ")
+    cv2.putText(i, s, (50, 100),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                2, (0, 255, 0), 3)
+    cv2.imshow("Image with Text", i)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+t()
+
+#36
+import cv2
+import numpy as np
+i = cv2.imread("image.jpg")
+hsv = cv2.cvtColor(i, cv2.COLOR_BGR2HSV)
+l = np.array([0, 0, 0])
+u = np.array([180, 255, 80])
+m = cv2.inRange(hsv, l, u)
+bg = cv2.bitwise_and(i, i, mask=m)
+cv2.imshow("Background Extracted", bg)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#37
+import cv2
+import numpy as np
+i = cv2.imread("image.jpg")
+hsv = cv2.cvtColor(i, cv2.COLOR_BGR2HSV)
+l = np.array([0, 50, 50])
+u = np.array([180, 255, 255])
+m = cv2.inRange(hsv, l, u)
+fg = cv2.bitwise_and(i, i, mask=m)
+cv2.imshow("Foreground Extracted", fg)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#38
+import cv2
+i = cv2.imread("face.jpg")
+g = cv2.cvtColor(i, cv2.COLOR_BGR2GRAY)
+fc = cv2.CascadeClassifier(cv2.data.haarcascades +
+                          "haarcascade_frontalface_default.xml")
+f = fc.detectMultiScale(g, 1.3, 5)
+print("Number of Faces Detected =", len(f))
+for (x, y, w, h) in f:
+    cv2.rectangle(i, (x, y), (x+w, y+h), (0, 255, 0), 2)
+cv2.imshow("Face Count", i)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#39
+import cv2
+v = cv2.VideoCapture("video.mp4")
+f = []
+while True:
+    r, x = v.read()
+    if not r:
+        break
+    f.append(x)
+v.release()
+for x in reversed(f):
+    cv2.imshow("Reverse Slow Motion", x)
+    if cv2.waitKey(100) & 0xFF == ord("q"):
+        break
+cv2.destroyAllWindows()
+
+#40
+import cv2
+import pytesseract
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+v = cv2.VideoCapture("video.mp4")
+while True:
+    r, f = v.read()
+    if not r:
+        break
+    g = cv2.cvtColor(f, cv2.COLOR_BGR2GRAY)
+    txt = pytesseract.image_to_string(g)
+    print("Extracted Text:\n", txt)
+    cv2.imshow("Video Frame", f)
+    if cv2.waitKey(30) & 0xFF == ord("q"):
+        break
+v.release()
+cv2.destroyAllWindows()
